@@ -1,4 +1,4 @@
-# ACompositor
+# Auto Compositor
 
 Auto Song Compositor Based On Diatonic Chord
 
