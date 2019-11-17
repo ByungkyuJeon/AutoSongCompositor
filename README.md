@@ -36,7 +36,7 @@ Latest Realese Set up File Download Link : [Download](https://drive.google.com/f
 
 ## Contributing
 
-* Read [Wiki](https://github.com/coxozo123/ACompositor/wiki/How-to-Contribute)
+* Read [Wiki](https://github.com/coxozo123/AutoCompositor/wiki/How-to-Contribute)
 
 ## Testing
 
