@@ -11,6 +11,7 @@ ACompositor gets user's setting, something like jengre and song mood, and genera
 
 ## Features
 
+* Auto Song Composition (randomly)
 * Fully Configured GUI
 * Easy Accessibilty (easy to use)
 * Sound Playing
