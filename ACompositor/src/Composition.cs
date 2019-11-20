@@ -24,21 +24,24 @@ namespace ACompositor.src
         bool isChanged;
 
         /// <summary>
-        /// Spotting Switch
-        /// </summary>
-        bool isSpotting;
-
-        /// <summary>
-        /// TwoHanding Switch
-        /// </summary>
-        bool isTwoHanding;
-
-        /// <summary>
         /// Song Setting
         /// </summary>
         SongSetting setting;
 
+        /// <summary>
+        /// Song Form List
+        /// </summary>
         List<Form> forms;
+
+        /// <summary>
+        /// Core form
+        /// </summary>
+        Form coreForm;
+
+        /// <summary>
+        /// Core scale notes
+        /// </summary>
+        ScaleNote coreScale;
 
         /// <summary>
         /// Name of composition
@@ -56,35 +59,47 @@ namespace ACompositor.src
         public bool IsChanged { get => isChanged; set => isChanged = value; }
 
         /// <summary>
-        /// Spotting Switch
-        /// </summary>
-        public bool IsSpotting { get => isSpotting; set => isSpotting = value; }
-
-        /// <summary>
-        /// TwoHanding Switch
-        /// </summary>
-        public bool IsTwoHanding { get => isTwoHanding; set => isTwoHanding = value; }
-
-        /// <summary>
         /// Song Setting
         /// </summary>
         internal SongSetting Setting { get => setting; set => setting = value; }
+
+        /// <summary>
+        /// Song form list
+        /// </summary>
+        internal List<Form> Forms { get => forms; set => forms = value; }
+
+        /// <summary>
+        /// Core form
+        /// </summary>
+        internal Form CoreForm { get => coreForm; set => coreForm = value; }
+
+        /// <summary>
+        /// Core scale notes
+        /// </summary>
+        internal ScaleNote CoreScale { get => coreScale; set => coreScale = value; }
+
 
         /// <summary>
         /// Empty Initiation
         /// </summary>
         public Composition()
         {
+            setting = new SongSetting();
 
+            forms = new List<Form>();
+
+            coreScale = new ScaleNote();
         }
 
         /// <summary>
         /// Setting Initiation
         /// </summary>
         /// <param name="setting"></param>
-        public Composition(SongSetting setting)
+        public Composition(SongSetting _setting)
         {
+            setting = _setting;
 
+            forms = new List<Form>();
         }
 
         /// <summary>

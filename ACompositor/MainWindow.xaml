@@ -8,46 +8,46 @@
         Title="AutoCompositer ver 1.0" Height="450" Width="800" WindowStartupLocation="CenterScreen" Background="#FF3C3C3C">
     <Grid>
         <Menu Margin="0" VerticalContentAlignment="Center" Padding="10,0" Height="25" VerticalAlignment="Top" Background="#FF3C3C3C">
-            <MenuItem Header="파일" Height="25" Foreground="White" Margin="0,0,10,0" FontSize="11">
-                <MenuItem Header="저장하기" FontSize="11"/>
-                <MenuItem Header="불러오기" FontSize="11"/>
-                <MenuItem Header="환경설정" FontSize="11"/>
+            <MenuItem Header="File" Height="25" Foreground="White" Margin="0,0,10,0" FontSize="11" Background="{x:Null}">
+                <MenuItem Header="Save File" FontSize="11" Background="{x:Null}" Foreground="Black" Click="Button_SaveFile_Click"/>
+                <MenuItem Header="Open File" FontSize="11" Foreground="Black" Click="Button_OpenFile_Click"/>
+                <MenuItem Header="Environment" FontSize="11" Foreground="Black" Click="Button_Environment_Click"/>
             </MenuItem>
-            <MenuItem Header="프로젝트" Foreground="White" Margin="0,0,10,0" FontSize="11"/>
+            <MenuItem Header="Project" Foreground="White" Margin="0,0,10,0" FontSize="11">
+                <MenuItem Header="New Composition" FontSize="11" Background="{x:Null}" Foreground="Black" Click="Button_NewComposition_Click"/>
+            </MenuItem>
         </Menu>
         <Menu Height="50" Margin="0,25,0,0" VerticalAlignment="Top" Foreground="{x:Null}" Background="#FF3C3C3C" Padding="10,0,20,0"/>
         <Grid Margin="10,75,9.6,10" Background="#FF323232">
-            <Grid Background="#FF282828" Margin="0,0,0,194">
-                <Grid Height="335" VerticalAlignment="Bottom" Background="#FF2D2D2D" Margin="0,0,600.4,-193.8"/>
-                <Grid Height="20" VerticalAlignment="Top" Margin="174,0,0.4,0" Background="#FF323232"/>
-                <Canvas HorizontalAlignment="Left" Height="101" Margin="174,40,0,0" VerticalAlignment="Top" Width="600" Background="#FF1E1E1E"/>
-                <Grid HorizontalAlignment="Left" Width="30" Margin="144,0,0,0.2" Background="#FF232323">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="31*"/>
-                        <RowDefinition Height="16*"/>
-                    </Grid.RowDefinitions>
-                    <Label Content="-" HorizontalAlignment="Left" Margin="8,40,0,0" VerticalAlignment="Top" FontSize="10" Foreground="#FFCDCDCD"/>
-                    <Label Content="-" HorizontalAlignment="Left" Margin="8,64,0,0" VerticalAlignment="Top" FontSize="10" Foreground="#FFCDCDCD"/>
-                    <Label Content="-" HorizontalAlignment="Left" Margin="8,88,0,0" VerticalAlignment="Top" FontSize="10" Foreground="#FFCDCDCD" Grid.RowSpan="2"/>
-                    <Label Content="-" HorizontalAlignment="Left" Margin="8,18.4,0,0" VerticalAlignment="Top" FontSize="10" Foreground="#FFCDCDCD" Grid.Row="1"/>
+            <Grid Background="#FF2D2D2D" Margin="0,0,600,0"/>
+            <Grid Background="#FF282828" Height="141" VerticalAlignment="Top">
+                <Grid Height="20" VerticalAlignment="Top" Margin="174,0,0.4,0" Background="#FF323232">
+                    <Label Content="Form" Padding="0,0,0,0" Margin="281,0,280,0" Foreground ="White" Background="{x:Null}" FontSize="9" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                 </Grid>
-                <Grid Height="20" VerticalAlignment="Top" Margin="174,20,0.4,0" Background="#FF282828"/>
-                <Grid HorizontalAlignment="Left" Height="141" VerticalAlignment="Top" Width="144" Background="#FF323232">
-                    <TextBox HorizontalAlignment="Left" Height="17" Margin="52,20,0,0" TextWrapping="Wrap" Text="composition" VerticalAlignment="Top" Width="82" Background="#FF3A3A3A" Foreground="White" FontSize="10"/>
-                    <Button Content="" HorizontalAlignment="Right" Margin="0,0,60,20" VerticalAlignment="Bottom" Width="25" Height="25"/>
-                    <Label Content="New Age" HorizontalAlignment="Left" Margin="27,42,0,0" VerticalAlignment="Top" FontSize="10" Foreground="#FFC8C8C8"/>
-                    <Button Content="" HorizontalAlignment="Right" Margin="0,0,35,20" VerticalAlignment="Bottom" Width="25" Height="25"/>
-                    <Button Content="" Margin="0,0,85,20" VerticalAlignment="Bottom" Height="25" HorizontalAlignment="Right" Width="25"/>
-                    <Button Content="" HorizontalAlignment="Right" Margin="0,0,10,20" VerticalAlignment="Bottom" Width="25" Height="25"/>
-                    <Label Content="C Major" HorizontalAlignment="Left" Margin="27,66,0,0" VerticalAlignment="Top" FontSize="10" Foreground="#FFCDCDCD"/>
-                    <Rectangle Fill="#FF262668" HorizontalAlignment="Left" Width="12"/>
-                    <Button Content="" HorizontalAlignment="Left" Margin="30,20,0,0" VerticalAlignment="Top" Width="17" Height="17"/>
+                <Canvas Margin="174,40,0.4,0.2" Background="#FF1E1E1E"/>
+                <Grid HorizontalAlignment="Left" Width="30" Margin="144,0,0,0.2" Background="#FF232323">
+                    <Label Content="-" HorizontalAlignment="Left" Margin="8,61,0,0" VerticalAlignment="Top" FontSize="10" Foreground="#FFCDCDCD"/>
+                    <Label Content="-" HorizontalAlignment="Left" Margin="8,85,0,0" VerticalAlignment="Top" FontSize="10" Foreground="#FFCDCDCD"/>
+                    <Label Content="-" HorizontalAlignment="Left" Margin="8,109,0,0" VerticalAlignment="Top" FontSize="10" Foreground="#FFCDCDCD"/>
+                    <Label Content="-" HorizontalAlignment="Left" Margin="8,39,0,0" VerticalAlignment="Top" FontSize="10" Foreground="#FFCDCDCD"/>
+                </Grid>
+                <Grid Margin="174,20,0.4,0" Background="#FF282828" Height="20" VerticalAlignment="Top"/>
+                <Grid Background="#FF323232" Margin="0,0,0,0.2" HorizontalAlignment="Left" Width="144">
+                    <TextBox Margin="52,20,0,0" TextWrapping="Wrap" Text="composition" Background="#FF3A3A3A" Foreground="White" FontSize="10" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="82"/>
+                    <Button Content="" Margin="0,0,60,19.4" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="25"/>
+                    <Label Content="New Age" Margin="27,42,0,0" FontSize="10" Foreground="#FFC8C8C8" HorizontalAlignment="Left" Width="51" Height="24" VerticalAlignment="Top"/>
+                    <Button Content="" Margin="0,0,35,19.4" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="25"/>
+                    <Button Content="" Margin="0,0,85,19.4" HorizontalAlignment="Right" Width="25" Height="25" VerticalAlignment="Bottom"/>
+                    <Button Content="" Margin="0,0,10,19.4" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="25"/>
+                    <Label Content="C Major" Margin="27,66,0,0" FontSize="10" Foreground="#FFCDCDCD" HorizontalAlignment="Left" Width="46" Height="24" VerticalAlignment="Top"/>
+                    <Rectangle Fill="#FF262668" Margin="0,0,132,-0.6"/>
+                    <Button Content="" Margin="30,20,0,0" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top"/>
                 </Grid>
             </Grid>
             <Grid Height="20" VerticalAlignment="Bottom" Background="#FF373737" Margin="174,0,0,0">
                 <Rectangle Fill="#FF464646" HorizontalAlignment="Left" Width="562" Margin="10,0,0,0" Height="6"/>
             </Grid>
         </Grid>
-        
+
     </Grid>
 </Window>

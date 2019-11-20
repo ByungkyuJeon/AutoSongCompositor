@@ -1,0 +1,38 @@
+﻿<Window x:Class="ACompositor.src.FormListingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ACompositor.src"
+        mc:Ignorable="d"
+        Title="Song Form" Height="482.927" Width="312.683" ResizeMode="NoResize">
+    <Grid>
+        <Label Content="Song Form" HorizontalAlignment="Left" Margin="37,10,0,0" VerticalAlignment="Top" Foreground="#FF525252"/>
+        <ListBox x:Name="FormList" HorizontalAlignment="Left" Height="339" Margin="37,41,0,0" VerticalAlignment="Top" Width="145" SelectionChanged="FormList_SelectionChanged"/>
+        <Button x:Name="add" Content="+" HorizontalAlignment="Left" Margin="65,385,0,0" VerticalAlignment="Top" Width="23" Click="add_Click"/>
+        <Button x:Name="delete" Content="-" HorizontalAlignment="Left" Margin="37,385,0,0" VerticalAlignment="Top" Width="23" Click="delete_Click"/>
+        <Button x:Name="confirm" Content="Confirm" HorizontalAlignment="Left" Margin="221,424,0,0" VerticalAlignment="Top" Width="75" Click="confirm_Click"/>
+        <Button x:Name="up" Content="up" HorizontalAlignment="Left" Margin="245,385,0,0" VerticalAlignment="Top" Width="23" Click="up_Click"/>
+        <Button x:Name="down" Content="down" HorizontalAlignment="Left" Margin="217,385,0,0" VerticalAlignment="Top" Width="23" Click="down_Click"/>
+        <ListBox x:Name="VariList" HorizontalAlignment="Left" Height="339" Margin="182,41,0,0" VerticalAlignment="Top" Width="86" SelectionChanged="VariList_SelectionChanged"/>
+        <ComboBox x:Name="SongForm_Forms" HorizontalAlignment="Left" Margin="37,424,0,0" VerticalAlignment="Top" Width="51" Height="19">
+            <Button BorderBrush="{x:Null}" Background="{x:Null}" Content="Intro" IsHitTestVisible="False"/>
+            <Button BorderBrush="{x:Null}" Background="{x:Null}" Content="Verse" IsHitTestVisible="False"/>
+            <Button BorderBrush="{x:Null}" Background="{x:Null}" Content="Verse2" IsHitTestVisible="False"/>
+            <Button BorderBrush="{x:Null}" Background="{x:Null}" Content="Hook" IsHitTestVisible="False"/>
+            <Button BorderBrush="{x:Null}" Background="{x:Null}" Content="Bridge" IsHitTestVisible="False"/>
+            <Button BorderBrush="{x:Null}" Background="{x:Null}" Content="Interlude" IsHitTestVisible="False"/>
+            <Button BorderBrush="{x:Null}" Background="{x:Null}" Content="Outro" IsHitTestVisible="False"/>
+        </ComboBox>
+        <ComboBox x:Name="SongForm_Varia" HorizontalAlignment="Left" Margin="93,424,0,0" VerticalAlignment="Top" Width="51" Height="19">
+            <Button BorderBrush="{x:Null}" Background="{x:Null}" Content="Random" IsHitTestVisible="False"/>
+            <Button BorderBrush="{x:Null}" Background="{x:Null}" Content="Origin" IsHitTestVisible="False"/>
+            <Button BorderBrush="{x:Null}" Background="{x:Null}" Content="Extend" IsHitTestVisible="False"/>
+            <Button BorderBrush="{x:Null}" Background="{x:Null}" Content="Shrink" IsHitTestVisible="False"/>
+            <Button BorderBrush="{x:Null}" Background="{x:Null}" Content="Octivation" IsHitTestVisible="False"/>
+            <Button BorderBrush="{x:Null}" Background="{x:Null}" Content="Tailing" IsHitTestVisible="False"/>
+            <Button BorderBrush="{x:Null}" Background="{x:Null}" Content="Newition" IsHitTestVisible="False"/>
+        </ComboBox>
+
+    </Grid>
+</Window>

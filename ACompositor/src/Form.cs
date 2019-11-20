@@ -26,12 +26,12 @@ namespace ACompositor.src
         /// <summary>
         /// Chord
         /// </summary>
-        List<Chord> chord;
+        Chord chord;
 
         /// <summary>
         /// mellody
         /// </summary>
-        List<Mellody> mellody;
+        Mellody mellody;
 
         /// <summary>
         /// rhythm
@@ -61,11 +61,13 @@ namespace ACompositor.src
         /// <summary>
         /// Chord
         /// </summary>
-        internal List<Chord> Chord { get => chord; set => chord = value; }
+        internal Chord Chord { get => chord; set => chord = value; }
 
         /// <summary>
         /// Mellody
         /// </summary>
-        internal List<Mellody> Mellody { get => mellody; set => mellody = value; }
+        internal Mellody Mellody { get => mellody; set => mellody = value; }
+
+
     }
 }

@@ -9,13 +9,28 @@ namespace ACompositor.src
     class Chord
     {
         /// <summary>
-        /// Core chord 
+        /// Full chord
         /// </summary>
-        List<List<Note>> coreChord;
+        List<List<Note>> fullChord;
 
         /// <summary>
-        /// Core chord
+        /// Reple type of chord
         /// </summary>
-        public List<List<Note>> CoreChord { get => coreChord; set => coreChord = value; }
+        List<ReplChord> chordType;
+
+        /// <summary>
+        /// Full chord
+        /// </summary>
+        public List<List<Note>> FullChord { get => fullChord; set => fullChord = value; }
+
+        /// <summary>
+        /// Reple type of chord
+        /// </summary>
+        public List<ReplChord> ChordType { get => chordType; set => chordType = value; }
+
+        public Chord()
+        {
+            fullChord = new List<List<Note>>();
+        }
     }
 }

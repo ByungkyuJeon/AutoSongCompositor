@@ -9,23 +9,37 @@ namespace ACompositor.src
     class Pattern
     {
         /// <summary>
-        /// Form unit loop length
+        /// Node unit loop length
         /// </summary>
-        int upperLoop;
+        int nodeLoop;
+
+        /// <summary>
+        /// random
+        /// </summary>
+        Random random;
 
         /// <summary>
         /// Node unit loop length
         /// </summary>
-        int lowerLoop;
+        public int NodeLoop { get => nodeLoop; set => nodeLoop = value; }
+
+        public Pattern()
+        {
+            random = new Random();
+        }
 
         /// <summary>
-        /// Form unit loop length
+        /// Makes pattern
         /// </summary>
-        public int UpperLoop { get => upperLoop; set => upperLoop = value; }
+        /// <returns></returns>
+        public void MakePattern(int _loopCount)
+        {
+            if(_loopCount == 0)
+            {
+                nodeLoop = ((random.Next() % 4) + 1) * 8;
+            }
 
-        /// <summary>
-        /// Node unit loop length
-        /// </summary>
-        public int LowerLoop { get => lowerLoop; set => lowerLoop = value; }
+            nodeLoop = _loopCount;
+        }
     }
 }
