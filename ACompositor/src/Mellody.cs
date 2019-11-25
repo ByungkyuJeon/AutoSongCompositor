@@ -22,5 +22,18 @@ namespace ACompositor.src
         {
             fullMellody = new List<Note>();
         }
+
+        /// <summary>
+        /// Deep copy
+        /// </summary>
+        /// <param name="_origin"></param>
+        public void Copy(Mellody _origin)
+        {
+            // note list copy
+            foreach(Note _iter in _origin.FullMellody)
+            {
+                fullMellody.Add(_iter);
+            }
+        }
     }
 }

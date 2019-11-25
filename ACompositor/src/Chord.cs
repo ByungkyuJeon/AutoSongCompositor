@@ -31,6 +31,34 @@ namespace ACompositor.src
         public Chord()
         {
             fullChord = new List<List<Note>>();
+
+            chordType = new List<ReplChord>();
+        }
+
+        /// <summary>
+        /// Deep copy
+        /// </summary>
+        /// <param name="_origin"></param>
+        public void Copy(Chord _origin)
+        {
+            List<Note> _buffer = new List<Note>();
+
+            // chord copy
+            foreach(List<Note> _iter in _origin.FullChord)
+            {
+                foreach(Note _subiter in _iter)
+                {
+                    _buffer.Add(_subiter);
+                }
+                fullChord.Add(_buffer);
+                _buffer.Clear();
+            }
+
+            // type copy
+            foreach(ReplChord _iter in _origin.ChordType)
+            {
+                chordType.Add(_iter);
+            }
         }
     }
 }

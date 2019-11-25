@@ -99,8 +99,16 @@ namespace ACompositor.src
     /// </summary>
     public enum Variation
     {
-        Origin, Extend, Shrink, Octaviation, tailing, Newition,
+        Origin, Extend, Shrink, Octaviation, Tailing, Newition,
 
         NULL
+    }
+
+    /// <summary>
+    /// Mellody Tones
+    /// </summary>
+    public enum MellTone
+    {
+        Tone, Tension, Avoid
     }
 }

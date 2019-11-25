@@ -37,9 +37,9 @@ namespace ACompositor
         Compositor compositor;
 
         /// <summary>
-        /// Localy loaded compositions in the view
+        /// Compostiion GUIs in the view
         /// </summary>
-        List<Composition> compositions;
+        List<CompUI> compUIList;
 
         public Main()
         {
@@ -57,23 +57,58 @@ namespace ACompositor
 
             compositor = new Compositor();
 
-            compositions = new List<Composition>();
+            compUIList = new List<CompUI>();
         }
 
         /// <summary>
         /// Draw loaded compositions on view
         /// </summary>
-        private void DrawNotes()
+        private void DrawView()
         {
-
+            foreach(CompUI _iter in compUIList)
+            {
+                grid_View.Children.Add(_iter.UI);
+            }
         }
 
         /// <summary>
         /// Clear drawings on view
         /// </summary>
-        private void ClearNotes()
+        private void ClearView()
         {
+            int _itemBuffer = -1;
 
+            bool _pass = true;
+
+            while (_pass)
+            {
+                _pass = true;
+
+                for (int _iter = 0; _iter < grid_View.Children.Count; _iter++)
+                {
+                    if (grid_View.Children[_iter].GetType() == typeof(Grid))
+                    {
+                        if (((Grid)grid_View.Children[_iter]).Name == "")
+                        {
+                            _itemBuffer = _iter;
+
+                            break;
+                        }
+                    }
+                }
+
+                if(_itemBuffer == -1)
+                {
+                    _pass = false;
+                }
+                else
+                {
+                    grid_View.Children.RemoveAt(_itemBuffer);
+                }
+
+                _itemBuffer = -1;
+
+            }
         }
 
         /// <summary>
@@ -116,9 +151,13 @@ namespace ACompositor
             compSettingWindow = new CompSettingWindow();
             compSettingWindow.ShowDialog();
 
-            compositions.Add(compSettingWindow.New_composition);
+            compUIList.Add(new CompUI(compSettingWindow.New_composition));
 
             compSettingWindow = null;
+
+            ClearView();
+
+            DrawView();
         }
     }
 }

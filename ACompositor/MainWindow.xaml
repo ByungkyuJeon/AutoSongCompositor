@@ -18,11 +18,11 @@
             </MenuItem>
         </Menu>
         <Menu Height="50" Margin="0,25,0,0" VerticalAlignment="Top" Foreground="{x:Null}" Background="#FF3C3C3C" Padding="10,0,20,0"/>
-        <Grid Margin="10,75,9.6,10" Background="#FF323232">
-            <Grid Background="#FF2D2D2D" Margin="0,0,600,0"/>
-            <Grid Background="#FF282828" Height="141" VerticalAlignment="Top">
+        <Grid x:Name="grid_View" Margin="10,75,9.6,10" Background="#FF323232">
+            <Grid x:Name="grid_backpanel1" Background="#FF2D2D2D" HorizontalAlignment="Left" Width="174"/>
+            <Grid Background="#FF282828" Height="141" VerticalAlignment="Top" Visibility="Collapsed">
                 <Grid Height="20" VerticalAlignment="Top" Margin="174,0,0.4,0" Background="#FF323232">
-                    <Label Content="Form" Padding="0,0,0,0" Margin="281,0,280,0" Foreground ="White" Background="{x:Null}" FontSize="9" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <Label Content="Form" Padding="0,0,0,0" Margin="281,0,280,0" Foreground ="White" Background="{x:Null}" FontSize="9" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" d:IsHidden="True"/>
                 </Grid>
                 <Canvas Margin="174,40,0.4,0.2" Background="#FF1E1E1E"/>
                 <Grid HorizontalAlignment="Left" Width="30" Margin="144,0,0,0.2" Background="#FF232323">
@@ -44,7 +44,7 @@
                     <Button Content="" Margin="30,20,0,0" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top"/>
                 </Grid>
             </Grid>
-            <Grid Height="20" VerticalAlignment="Bottom" Background="#FF373737" Margin="174,0,0,0">
+            <Grid x:Name="grid_backpanel2" Height="20" VerticalAlignment="Bottom" Background="#FF373737" Margin="174,0,0,0">
                 <Rectangle Fill="#FF464646" HorizontalAlignment="Left" Width="562" Margin="10,0,0,0" Height="6"/>
             </Grid>
         </Grid>

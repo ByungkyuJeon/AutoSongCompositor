@@ -136,7 +136,7 @@ namespace ACompositor.src
             }
             else
             {
-                return Variation.tailing;
+                return Variation.Tailing;
             }
         }
 
