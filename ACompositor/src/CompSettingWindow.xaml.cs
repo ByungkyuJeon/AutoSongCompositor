@@ -201,5 +201,22 @@ namespace ACompositor.src
             }
         }
 
+        /// <summary>
+        /// Sets composition
+        /// </summary>
+        /// <param name="_comp"></param>
+        public void SetComposition(Composition _comp)
+        {
+            new_composition = _comp;
+
+            InitiateComp();
+        }
+
+
+        private void InitiateComp()
+        {
+
+        }
+
     }
 }

@@ -38,7 +38,9 @@ namespace ACompositor.src
         {
             if (_loopCount == 0)
             {
-                nodeLoop = _timeDic[random.Next() % _timeDic[_timeDic.Count - 1]] * 8;
+                nodeLoop = _timeDic[random.Next() % (_timeDic.Count - 1)] * 8;
+
+                return;
             }
 
             nodeLoop = _loopCount;

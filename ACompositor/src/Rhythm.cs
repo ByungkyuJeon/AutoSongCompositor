@@ -83,11 +83,11 @@ namespace ACompositor.src
             {
                 _keyBuffer = random.Next() % 3;
 
-                if(!(_loopBuffer < _keyBuffer))
+                if(_loopBuffer >= timeDic[_keyBuffer])
                 {
                     _noteTimeBuffer.Add(timeDic[_keyBuffer]);
 
-                    _loopBuffer -= _keyBuffer;
+                    _loopBuffer -= timeDic[_keyBuffer];
                 }
             }
 

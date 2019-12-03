@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ACompositor"
         mc:Ignorable="d"
-        Title="AutoCompositer ver 1.0" Height="450" Width="800" WindowStartupLocation="CenterScreen" Background="#FF3C3C3C">
+        Title="AutoCompositer ver 1.0" Height="450" Width="800" WindowStartupLocation="CenterScreen" Background="#FF3C3C3C" KeyDown="Window_KeyDown">
     <Grid>
         <Menu Margin="0" VerticalContentAlignment="Center" Padding="10,0" Height="25" VerticalAlignment="Top" Background="#FF3C3C3C">
             <MenuItem Header="File" Height="25" Foreground="White" Margin="0,0,10,0" FontSize="11" Background="{x:Null}">

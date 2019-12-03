@@ -131,11 +131,15 @@ namespace ACompositor.src
         {
             Form _result = new Form();
 
-            _result.Rhythm = GenerateRhythm(_composition);
+            Composition _compBuffer = _composition;
 
-            _result.Chord = GenerateChord(_composition);
+            _compBuffer.CoreForm = _result;
 
-            _result.Mellody = GenerateMellody(_composition);
+            _result.Rhythm = GenerateRhythm(_compBuffer);
+
+            _result.Chord = GenerateChord(_compBuffer);
+
+            _result.Mellody = GenerateMellody(_compBuffer);
 
             return _result;
         }
@@ -149,7 +153,7 @@ namespace ACompositor.src
         {
             Rhythm result = new Rhythm();
 
-            result.MakeRhythm(_composition.Setting.LoopCount, _composition.Setting.ChordCount, _composition.CoreForm.Length);
+            result.MakeRhythm(_composition.Setting.LoopCount, _composition.Setting.ChordCount, 2);
 
             return result;
         }
@@ -170,7 +174,7 @@ namespace ACompositor.src
             }
 
             // 2. Makes diatonic chord mood list
-            _result.ChordType = MakeReplList(_composition.Setting.ChordCount);
+            _result.ChordType = MakeReplList(_composition.Setting.ChordCount, 2);
 
             // 3. Makes specific chords
             _result.FullChord = MakeSpecificChord(_result.ChordType, _composition.CoreScale.ScaleChord, _composition.Setting.BaseOctave);
@@ -221,12 +225,12 @@ namespace ACompositor.src
                 // tension : 30 %
                 if (_ranBuffer <= 2)
                 {
-                    _result.FullMellody.Add(_tension[_countBuffer / 8][random.Next() % _tension[_countBuffer / 8].Count]);
+                    _result.FullMellody.Add(GetOctaveNote(_tension[_countBuffer / 8][random.Next() % _tension[_countBuffer / 8].Count], _composition.Setting.BaseOctave));
                 }
                 // chord tone : 70%
                 else
                 {
-                    _result.FullMellody.Add(_tone[_countBuffer / 8][random.Next() % _tone[_countBuffer / 8].Count]);
+                    _result.FullMellody.Add(GetOctaveNote(_tone[_countBuffer / 8][random.Next() % _tone[_countBuffer / 8].Count], _composition.Setting.BaseOctave));
                 }
 
                 _countBuffer += _val;
@@ -549,16 +553,30 @@ namespace ACompositor.src
                 _tone.Add(new List<Note>());
             }
 
+            // copy chord as pure
+            List<List<Note>> _chordBuffer = new List<List<Note>>();
+            List<Note> _subBuffer = new List<Note>();
+
+            foreach(List<Note> _iterChord in _form.Chord.FullChord)
+            {
+                foreach(Note _iterNote in _iterChord)
+                {
+                    _subBuffer.Add(GetPureNote(_iterNote));
+                }
+                _chordBuffer.Add(CopyNoteList(_subBuffer));
+                _subBuffer.Clear();
+            }
+
             // 2. make avoid, tension and chord tone note list
-            foreach (List<Note> _iterChord in _form.Chord.FullChord)
+            foreach (List<Note> _iterChord in _chordBuffer)
             {
                 foreach (Note _iterNote in _iterChord)
                 {
                     // chord tone
-                    _tone[_form.Chord.FullChord.IndexOf(_iterChord)].Add(GetPureNote(_iterNote));
+                    _tone[_chordBuffer.IndexOf(_iterChord)].Add(GetPureNote(_iterNote));
 
                     // check if there is 3 avoid or tension notes
-                    if (_tone[_form.Chord.FullChord.IndexOf(_iterChord)].Count == _iterChord.Count)
+                    if (_tone[_chordBuffer.IndexOf(_iterChord)].Count == _iterChord.Count)
                     {
                         break;
                     }
@@ -572,12 +590,12 @@ namespace ACompositor.src
                     // avoid 
                     if ((int)_scale.Notes[_thirdNoteBuffer] - _lastNoteBuffer == 1)
                     {
-                        _avoid[_form.Chord.FullChord.IndexOf(_iterChord)].Add(_scale.Notes[_thirdNoteBuffer]);
+                        _avoid[_chordBuffer.IndexOf(_iterChord)].Add(_scale.Notes[_thirdNoteBuffer]);
                     }
                     // tension
                     else
                     {
-                        _tension[_form.Chord.FullChord.IndexOf(_iterChord)].Add(_scale.Notes[_thirdNoteBuffer]);
+                        _tension[_chordBuffer.IndexOf(_iterChord)].Add(_scale.Notes[_thirdNoteBuffer]);
                     }
                 }
             }
@@ -600,52 +618,35 @@ namespace ACompositor.src
         /// </summary>
         /// <param name="ch_count"></param>
         /// <returns></returns>
-        List<ReplChord> MakeReplList(int ch_count)
+        List<ReplChord> MakeReplList(int _chordCount, int _chordLength)
         {
-            List<ReplChord> repls = new List<ReplChord>();
-            List<ReplChord> rpelbuffer = new List<ReplChord>();
-            List<int> rpelnum = new List<int>();
-            bool passable = true;
-            int count = 0;
+            List<ReplChord> _repls = new List<ReplChord>();
+
+            int _count = _chordCount * _chordLength;
+            int _ranBuffer;
 
             // 1. main chord form making
-            if (ch_count == 4)
+            while (_count > 0)
             {
-                if (random.Next() % 2 == 0)
+                _ranBuffer = random.Next() % 3;
+
+                if (_ranBuffer == 0)
                 {
-                    repls.Add(ReplChord.Tonic);
+                    _repls.Add(ReplChord.Dominant);
+                }
+                else if(_ranBuffer == 1)
+                {
+                    _repls.Add(ReplChord.SubDominant);
                 }
                 else
                 {
-                    repls.Add(ReplChord.SubDominant);
+                    _repls.Add(ReplChord.Tonic);
                 }
+
+                _count--;
             }
 
-            repls.Add(ReplChord.Dominant);
-            repls.Add(ReplChord.SubDominant);
-            repls.Add(ReplChord.Tonic);
-
-
-            // 2. randomly sort repls
-            for (int i = 0; i < repls.Count;)
-            {
-                passable = true;
-
-                count = random.Next() % repls.Count;
-
-                foreach (int iter in rpelnum)
-                {
-                    if (iter == count) { passable = false; break; }
-                }
-                if (!passable) { continue; }
-
-                rpelnum.Add(random.Next() % repls.Count);
-                rpelbuffer.Add(repls[i]);
-
-                i++;
-            }
-
-            return rpelbuffer;  
+            return _repls;  
         }
 
         /// <summary>
@@ -667,48 +668,49 @@ namespace ACompositor.src
                 {
                     case (ReplChord.Tonic):
 
-                        _result.Add(_scaleChords[(int)GetRandomRepl(iter)]);
+                        _result.Add(CopyNoteList(_scaleChords[(int)GetRandomRepl(iter)]));
 
                         break;
 
                     case (ReplChord.SubDominant):
 
-                        _result.Add(_scaleChords[(int)GetRandomRepl(iter)]);
+                        _result.Add(CopyNoteList(_scaleChords[(int)GetRandomRepl(iter)]));
 
                         break;
 
                     case (ReplChord.Dominant):
 
-                        _result.Add(_scaleChords[(int)GetRandomRepl(iter)]);
+                        _result.Add(CopyNoteList(_scaleChords[(int)GetRandomRepl(iter)]));
 
                         break;
                 }
             }
 
-            // 1.1 _result list copy to buffer
-            List<List<Note>> _bufferList = new List<List<Note>>();
+            // copy chord as pure
+            List<List<Note>> _chordBuffer = new List<List<Note>>();
             List<Note> _subBuffer = new List<Note>();
 
-            foreach (List<Note> iter in _result)
+            foreach (List<Note> _iterChord in _result)
             {
-                foreach (Note itt in iter)
+                foreach (Note _iterNote in _iterChord)
                 {
-                    _subBuffer.Add(itt);
+                    _subBuffer.Add(GetPureNote(_iterNote));
                 }
-                _bufferList.Add(_subBuffer);
-                _subBuffer = new List<Note>();
+                _chordBuffer.Add(CopyNoteList(_subBuffer));
+                _subBuffer.Clear();
             }
 
-            // 2. specific chord making
-            foreach (List<Note> iter in _result)
+            // 1. specific chord making
+            for (int _iter = 0; _iter < _chordBuffer.Count; _iter++)
             {
-                foreach (Note itt in iter)
+                for(int _itt = 0; _itt < _chordBuffer[_iter].Count; _itt++)
                 {
-                    _bufferList[_result.IndexOf(iter)][iter.IndexOf(itt)] = GetOctaveNote(itt, _baseOctave);
+                    _result[_iter][_itt] = GetOctaveNote(_chordBuffer[_iter][_itt], _baseOctave - 1);
                 }
             }
+            
 
-            return _bufferList;
+            return _result;
         }
 
         /// <summary>
@@ -797,6 +799,23 @@ namespace ACompositor.src
             }
 
             return (Note)buffer;
+        }
+
+        /// <summary>
+        /// Copy note array
+        /// </summary>
+        /// <param name="_copy"></param>
+        /// <returns></returns>
+        List<Note> CopyNoteList(List<Note> _copy)
+        {
+            List<Note> _result = new List<Note>();
+
+            foreach(Note _iter in _copy)
+            {
+                _result.Add(_iter);
+            }
+
+            return _result;
         }
 
         /// <summary>

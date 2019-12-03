@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ACompositor.src
 {
-    class Composition
+    public class Composition
     {
         /// <summary>
         /// Name of composition

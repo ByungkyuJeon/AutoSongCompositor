@@ -62,8 +62,13 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NAudio, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.9.0\lib\net35\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -96,9 +101,9 @@
       <DependentUpon>FormListingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\Mellody.cs" />
+    <Compile Include="src\NoteUI.cs" />
     <Compile Include="src\Pattern.cs" />
     <Compile Include="src\Player.cs" />
-    <Compile Include="src\ResourceManager.cs" />
     <Compile Include="src\Rhythm.cs" />
     <Compile Include="src\ScaleNote.cs" />
     <Compile Include="src\SongSetting.cs" />
@@ -142,6 +147,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -151,10 +157,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="resource\image\" />
-    <Folder Include="resource\sound\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>
@@ -166,6 +169,121 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\image\icon_setting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="resource\image\icon_pause.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\image\icon_play.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\image\icon_stop.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\icon_pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_setting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\sound\piano\a1.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\a2.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\a3.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\a4.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\a5.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\a7.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\au1.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\au2.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\au3.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\au4.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\au5.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\au6.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\au7.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\b1.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\b2.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\b3.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\b4.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\b5.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\b6.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\b7.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\c1.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\c2.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\c3.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\c4.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\c5.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\c6.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\c7.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\cu1.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\cu2.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\cu3.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\cu4.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\cu5.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\cu6.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\cu7.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\d1.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\d2.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\d3.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\d4.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\d5.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\d6.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\d7.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\du1.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\du2.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\du3.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\du4.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\du5.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\du6.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\du7.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\e1.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\e2.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\e3.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\e4.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\e5.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\e6.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\e7.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\f1.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\f2.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\f3.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\f4.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\f5.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\f6.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\f7.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\fu1.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\fu2.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\fu3.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\fu4.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\fu5.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\fu6.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\fu7.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\g1.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\g2.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\g3.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\g4.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\g5.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\g6.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\g7.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\gu1.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\gu2.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\gu3.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\gu4.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\gu5.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\gu6.mp3" />
+    <EmbeddedResource Include="resource\sound\piano\gu7.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

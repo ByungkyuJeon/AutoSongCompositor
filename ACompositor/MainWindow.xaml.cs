@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ACompositor.src;
+using System.Timers;
 
 namespace ACompositor
 {
@@ -41,6 +42,16 @@ namespace ACompositor
         /// </summary>
         List<CompUI> compUIList;
 
+        /// <summary>
+        /// Selected compostions
+        /// </summary>
+        List<int> selectedComp;
+
+        /// <summary>
+        /// Current time position
+        /// </summary>
+        int currentPosition = 0;
+
         public Main()
         {
             InitializeComponent();
@@ -58,6 +69,19 @@ namespace ACompositor
             compositor = new Compositor();
 
             compUIList = new List<CompUI>();
+
+            selectedComp = new List<int>();
+        }
+
+        /// <summary>
+        /// Draw specific mellodies, rhythm, chord
+        /// </summary>
+        private void DrawComp()
+        {
+            foreach(CompUI _iter in compUIList)
+            {
+                _iter.SetPosition(currentPosition);
+            }
         }
 
         /// <summary>
@@ -65,6 +89,10 @@ namespace ACompositor
         /// </summary>
         private void DrawView()
         {
+            ClearView();
+
+            DrawComp();
+
             foreach(CompUI _iter in compUIList)
             {
                 grid_View.Children.Add(_iter.UI);
@@ -112,6 +140,23 @@ namespace ACompositor
         }
 
         /// <summary>
+        /// Removes composition on view
+        /// </summary>
+        /// <param name="_index"></param>
+        private void RemoveComp()
+        {
+            foreach(int _iter in selectedComp)
+            {
+                compUIList.RemoveAt(_iter);
+            }
+
+            selectedComp.Clear();
+
+            DrawView();
+        }
+
+
+        /// <summary>
         /// Click event callback : file menu > save file
         /// </summary>
         /// <param name="sender"></param>
@@ -151,13 +196,152 @@ namespace ACompositor
             compSettingWindow = new CompSettingWindow();
             compSettingWindow.ShowDialog();
 
-            compUIList.Add(new CompUI(compSettingWindow.New_composition));
+            compUIList.Add(new CompUI(compSettingWindow.New_composition, compUIList.Count));
+
+            compUIList[compUIList.Count - 1].Button_Composite.Click += OnCompositeClick;
+            compUIList[compUIList.Count - 1].Button_Pause.Click += OnPauseClick;
+            compUIList[compUIList.Count - 1].Button_Wide.Click += OnWideClick;
+            compUIList[compUIList.Count - 1].Button_Play.Click += OnPlayClick;
+            compUIList[compUIList.Count - 1].Button_Setting.Click += OnSettingClick;
 
             compSettingWindow = null;
 
             ClearView();
 
             DrawView();
+
+        }
+
+        /// <summary>
+        /// Click event callback : composition UI composite button
+        /// </summary>
+        /// <param name="_sender"></param>
+        /// <param name="_e"></param>
+        private void OnCompositeClick(object _sender, RoutedEventArgs _e)
+        {
+            // composite
+            compUIList[GetEventSource(_sender)].Composition = compositor.GenerateFull(compUIList[GetEventSource(_sender)].Composition);
+
+            // draw
+            DrawView();
+        }
+
+        /// <summary>
+        /// Click event callback : composition UI play button
+        /// </summary>
+        /// <param name="_sender"></param>
+        /// <param name="_e"></param>
+        private void OnPlayClick(object _sender, RoutedEventArgs _e)
+        {
+            List<Composition> _playBuffer = new List<Composition>();
+            _playBuffer.Add(compUIList[GetEventSource(_sender)].Composition);
+
+            player.Play(_playBuffer, currentPosition);
+        }
+
+        /// <summary>
+        /// Click event callback : composition UI stop button
+        /// </summary>
+        /// <param name="_sender"></param>
+        /// <param name="_e"></param>
+        private void OnStopClick(object _sender, RoutedEventArgs _e)
+        {
+            player.Stop();
+        }
+
+        /// <summary>
+        /// Click event callback : composition UI pause button
+        /// </summary>
+        /// <param name="_sender"></param>
+        /// <param name="_e"></param>
+        private void OnPauseClick(object _sender, RoutedEventArgs _e)
+        {
+
+        }
+
+        /// <summary>
+        /// Click event callback : composition UI wide button
+        /// </summary>
+        /// <param name="_sender"></param>
+        /// <param name="_e"></param>
+        private void OnWideClick(object _sender, RoutedEventArgs _e)
+        {
+            compUIList[GetEventSource(_sender)].SetWide((int)grid_View.ActualHeight - 20);
+        }
+
+        /// <summary>
+        /// Click event callback : composition UI setting button
+        /// </summary>
+        /// <param name="_sender"></param>
+        /// <param name="_e"></param>
+        private void OnSettingClick(object _sender, RoutedEventArgs _e)
+        {
+            compSettingWindow = new CompSettingWindow();
+            compSettingWindow.SetComposition(compUIList[GetEventSource(_sender)].Composition);
+
+            compSettingWindow.ShowDialog();
+
+            compUIList[GetEventSource(_sender)].Composition = compSettingWindow.New_composition;
+
+            DrawView();
+        }
+
+        /// <summary>
+        /// Click event callback : composition UI composition click
+        /// </summary>
+        /// <param name="_sender"></param>
+        /// <param name="_e"></param>
+        private void OnCompClick(object _sender, RoutedEventArgs _e)
+        {
+
+            // checks if already in the list
+            foreach(int _iter in selectedComp)
+            {
+                if(_iter == GetEventSource(_sender))
+                {
+                    return;
+                }
+            }
+
+            // add to list
+            selectedComp.Add(GetEventSource(_sender));
+        }
+
+        /// <summary>
+        /// Returns index of event source
+        /// </summary>
+        /// <param name="_sender"></param>
+        /// <returns></returns>
+        private int GetEventSource(object _sender)
+        {
+            foreach(CompUI _iter in compUIList)
+            {
+                if(_iter.Button_Setting.Equals(_sender) || _iter.Button_Composite.Equals(_sender) || _iter.Button_Pause.Equals(_sender) 
+                    || _iter.Button_Play.Equals(_sender) || _iter.Button_Wide.Equals(_sender))
+                {
+                    return compUIList.IndexOf(_iter);
+                }
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Key down event call back : whole window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_KeyDown(object _sender, KeyEventArgs _e)
+        {
+            switch(_e.Key)
+            {
+                case (Key.Delete):
+
+                    // removement
+                    RemoveComp();
+
+                    break;
+            }
         }
     }
 }

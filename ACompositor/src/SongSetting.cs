@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ACompositor.src
 {
-    class SongSetting
+    public class SongSetting
     {
         /// <summary>
         /// Song jengre
