@@ -32,7 +32,7 @@ Download from the link down bellow.
 Extract zip file
 run Setup.exe file
 
-Latest Realese Set up File Download Link : [Download](https://drive.google.com/file/d/1Zz22HaR8oJMro9wszAYIPe_84AU-RUO4/view?usp=sharing)
+Latest Realese Set up File Download Link : [Download](https://drive.google.com/file/d/199VgONXu5TDXpfDSVYENp4RBj7HuaS4d/view?usp=sharing)
 
 ## Contributing
 
