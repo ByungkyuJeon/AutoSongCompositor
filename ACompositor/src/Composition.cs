@@ -99,6 +99,10 @@ namespace ACompositor.src
         {
             setting = _setting;
 
+            coreScale = new ScaleNote();
+
+            CoreForm = new Form();
+
             forms = new List<Form>();
         }
 

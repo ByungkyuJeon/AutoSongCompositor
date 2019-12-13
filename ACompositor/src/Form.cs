@@ -82,6 +82,10 @@ namespace ACompositor.src
         public Form()
         {
             length = 1;
+
+            rhythm = new Rhythm();
+            chord = new Chord();
+            mellody = new Mellody();
         }
 
         /// <summary>

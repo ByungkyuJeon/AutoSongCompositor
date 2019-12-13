@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace ACompositor.src
 {
@@ -58,6 +60,11 @@ namespace ACompositor.src
         /// True if UI is in wide mode
         /// </summary>
         bool isWide = false;
+
+        /// <summary>
+        /// True if the composition is selected form main UI
+        /// </summary>
+        bool isSelected = false;
 
         /// <summary>
         /// Compostion UI index number for position
@@ -125,6 +132,11 @@ namespace ACompositor.src
         public TextBox TextBox_CompositionName { get => textBox_CompositionName; set => textBox_CompositionName = value; }
 
         /// <summary>
+        /// Composition Header grid
+        /// </summary>
+        public Grid Grid_Header { get => grid_Header; set => grid_Header = value; }
+
+        /// <summary>
         /// Constructor with drawing
         /// </summary>
         /// <param name="_composition"></param>
@@ -150,11 +162,12 @@ namespace ACompositor.src
                 grid_Mother = new Grid()
                 {
                     VerticalAlignment = System.Windows.VerticalAlignment.Top,
-                    Height = 150 + (150 * IndexUI),
+                    Height = 150,
+                    Margin = new Thickness(0, indexUI, 0, 0),
                     Background = new SolidColorBrush(Color.FromRgb(40, 40, 40))
                 };
 
-                grid_Header = new Grid()
+                Grid_Header = new Grid()
                 {
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
                     Width = 144,
@@ -205,21 +218,23 @@ namespace ACompositor.src
 
                 Button_Setting = new Button()
                 {
-                    // TODO :: 이미지 필요
                     Height = 17,
                     Width = 17,
                     Margin = new System.Windows.Thickness(30, 20, 0, 0),
                     VerticalAlignment = System.Windows.VerticalAlignment.Top,
-                    HorizontalAlignment = System.Windows.HorizontalAlignment.Left
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                    BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255)),
+                    Background = new ImageBrush(new BitmapImage(new Uri(@"resource/image/icon_setting.png", UriKind.Relative)))
                 };
                 Button_Composite = new Button()
                 {
-                    // TODO :: 이미지 필요
                     Height = 25,
                     Width = 25,
                     Margin = new System.Windows.Thickness(0, 0, 85, 19.4),
                     VerticalAlignment = System.Windows.VerticalAlignment.Bottom,
-                    HorizontalAlignment = System.Windows.HorizontalAlignment.Right
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Right,
+                    BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255)),
+                    Background = new ImageBrush(new BitmapImage(new Uri(@"resource/image/icon_composite.png", UriKind.Relative)))
                 };
                 Button_Play = new Button()
                 {
@@ -228,7 +243,9 @@ namespace ACompositor.src
                     Width = 25,
                     Margin = new System.Windows.Thickness(0, 0, 60, 19.4),
                     VerticalAlignment = System.Windows.VerticalAlignment.Bottom,
-                    HorizontalAlignment = System.Windows.HorizontalAlignment.Right
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Right,
+                    BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255)),
+                    Background = new ImageBrush(new BitmapImage(new Uri(@"resource/image/icon_play2.png", UriKind.Relative)))
                 };
                 Button_Wide = new Button()
                 {
@@ -237,7 +254,9 @@ namespace ACompositor.src
                     Width = 25,
                     Margin = new System.Windows.Thickness(0, 0, 10, 19.4),
                     VerticalAlignment = System.Windows.VerticalAlignment.Bottom,
-                    HorizontalAlignment = System.Windows.HorizontalAlignment.Right
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Right,
+                    BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255)),
+                    Background = new ImageBrush(new BitmapImage(new Uri(@"resource/image/icon_expand.png", UriKind.Relative)))
                 };
                 Button_Pause = new Button()
                 {
@@ -246,7 +265,9 @@ namespace ACompositor.src
                     Width = 25,
                     Margin = new System.Windows.Thickness(0, 0, 35, 19.4),
                     VerticalAlignment = System.Windows.VerticalAlignment.Bottom,
-                    HorizontalAlignment = System.Windows.HorizontalAlignment.Right
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Right,
+                    BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255)),
+                    Background = new ImageBrush(new BitmapImage(new Uri(@"resource/image/icon_pause2.png", UriKind.Relative)))
                 };
 
                 grid_FormLine = new Grid()
@@ -337,14 +358,14 @@ namespace ACompositor.src
                     Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255))
                 };
 
-                grid_Header.Children.Add(TextBox_CompositionName);
-                grid_Header.Children.Add(label_Jengre);
-                grid_Header.Children.Add(label_Scale);
-                grid_Header.Children.Add(Button_Setting);
-                grid_Header.Children.Add(Button_Composite);
-                grid_Header.Children.Add(Button_Play);
-                grid_Header.Children.Add(Button_Wide);
-                grid_Header.Children.Add(Button_Pause);
+                Grid_Header.Children.Add(TextBox_CompositionName);
+                Grid_Header.Children.Add(label_Jengre);
+                Grid_Header.Children.Add(label_Scale);
+                Grid_Header.Children.Add(Button_Setting);
+                Grid_Header.Children.Add(Button_Composite);
+                Grid_Header.Children.Add(Button_Play);
+                Grid_Header.Children.Add(Button_Wide);
+                Grid_Header.Children.Add(Button_Pause);
 
                 grid_FormLine.Children.Add(label_FormName);
 
@@ -357,7 +378,7 @@ namespace ACompositor.src
                 grid_NoteView.Children.Add(canvas_Chord);
 
                 grid_Mother.Children.Add(grid_NoteView);
-                grid_Mother.Children.Add(grid_Header);
+                grid_Mother.Children.Add(Grid_Header);
                 grid_Mother.Children.Add(grid_FormLine);
                 grid_Mother.Children.Add(grid_NodeLine);
                 grid_Mother.Children.Add(grid_NoteLine);
@@ -387,6 +408,40 @@ namespace ACompositor.src
             RefreshNotes();
         }
 
+        /// <summary>
+        /// Sets new UI margin
+        /// </summary>
+        /// <param name="_top"></param>
+        public void RefreshMargin(int _top)
+        {
+            grid_Mother.Margin = new Thickness(grid_Mother.Margin.Left, _top, grid_Mother.Margin.Right, grid_Mother.Margin.Bottom);
+        }
+
+        /// <summary>
+        /// Sets selection switch
+        /// </summary>
+        public void SetSelected(bool _sel)
+        {
+            if(_sel)
+            {
+                grid_Header.Background = new SolidColorBrush(Color.FromRgb(100, 20, 200));
+            }
+            else
+            {
+                grid_Header.Background = new SolidColorBrush(Color.FromRgb(50, 50, 50));
+            }
+
+            isSelected = _sel;
+        }
+
+        public void RefreshWidth(int _height)
+        {
+            if(isWide)
+            {
+                grid_Mother.Height = _height;
+            }
+        }
+
         public void SetWide(int _height)
         {
             if(isWide)
@@ -410,6 +465,7 @@ namespace ACompositor.src
         /// </summary>
         void RefreshNotes()
         {
+            grid_NoteView.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
             canvas_Mellody.Margin = new System.Windows.Thickness(0, 0, 0, grid_NoteView.ActualHeight / 2);
             canvas_Chord.Margin = new System.Windows.Thickness(0, grid_NoteView.ActualHeight / 2, 0, 0);
@@ -437,15 +493,15 @@ namespace ACompositor.src
             // check content
             if(composition.Forms.Count > 0)
             {
-                foreach(Form _form in composition.Forms)
+                for(int _form = 0; _form < composition.Forms.Count; _form++)
                 {
-                    foreach(Note _note in _form.Mellody.FullMellody)
+                    for(int _note = 0; _note < composition.Forms[_form].Mellody.FullMellody.Count; _note++)
                     {
                         // check for mellodies in range
                         if(_timeBuffer >= currentPos && _timeBuffer <= currentPos + 32)
                         {
                             // add mellody notes in range
-                            mellody_Notes.Add(new NoteUI(_note, _timeBuffer - currentPos, (int)canvas_Mellody.ActualWidth, (int)canvas_Mellody.ActualHeight, 
+                            mellody_Notes.Add(new NoteUI(composition.Forms[_form].Mellody.FullMellody[_note], _timeBuffer - currentPos, (int)canvas_Mellody.ActualWidth, (int)canvas_Mellody.ActualHeight, 
                                 composition.Setting.BaseOctave, 0, 0));
                         }
                         else if(_timeBuffer > currentPos + 32)
@@ -456,7 +512,7 @@ namespace ACompositor.src
                         }
 
                         // count time
-                        _timeBuffer += _form.Rhythm.NoteTime[_form.Mellody.FullMellody.IndexOf(_note)];
+                        _timeBuffer += composition.Forms[_form].Rhythm.NoteTime[_note];
                     }
 
                     if(_passBuffer)
@@ -465,11 +521,11 @@ namespace ACompositor.src
                         {
                             if (_chordBuffer % 8 == 0)
                             {
-                                foreach (Note _chordNote in _form.Chord.FullChord[(_chordBuffer % 32) / 8])
+                                foreach (Note _chordNote in composition.Forms[_form].Chord.FullChord[(_chordBuffer % 32) / 8])
                                 {
                                     // add chord notes in range
                                     chord_Notes.Add(new NoteUI(_chordNote, _chordBuffer - currentPos, (int)canvas_Chord.ActualWidth, (int)canvas_Chord.ActualHeight,
-                                        composition.Setting.BaseOctave, 1, _form.Chord.FullChord[(_timeBuffer % 32) / 8].IndexOf(_chordNote)));
+                                        composition.Setting.BaseOctave, 1, composition.Forms[_form].Chord.FullChord[(_timeBuffer % 32) / 8].IndexOf(_chordNote)));
                                 }
                             }
 

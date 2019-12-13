@@ -41,17 +41,16 @@ namespace ACompositor.src
         /// <param name="_origin"></param>
         public void Copy(Chord _origin)
         {
-            List<Note> _buffer = new List<Note>();
 
             // chord copy
-            foreach(List<Note> _iter in _origin.FullChord)
+            for(int _iter = 0; _iter < _origin.FullChord.Count; _iter++)
             {
-                foreach(Note _subiter in _iter)
+                fullChord.Add(new List<Note>());
+
+                for(int _subiter = 0; _subiter < _origin.FullChord[_iter].Count; _subiter++)
                 {
-                    _buffer.Add(_subiter);
+                    fullChord[_iter].Add(_origin.FullChord[_iter][_subiter]);
                 }
-                fullChord.Add(_buffer);
-                _buffer.Clear();
             }
 
             // type copy

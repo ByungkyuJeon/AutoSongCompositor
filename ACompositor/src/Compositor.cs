@@ -48,56 +48,56 @@ namespace ACompositor.src
             _result.CoreForm = GenerateCoreForm(_composition);
 
             // 2. make forms based on core form
-            foreach (Variation _vari in _composition.Setting.Variations)
+            for (int _vari = 0; _vari < _composition.Setting.Variations.Count; _vari++)
             {
                 // 2.1 check variation and variate
-                switch (_vari)
+                switch (_composition.Setting.Variations[_vari])
                 {
                     case (Variation.Origin):
 
                         _result.Forms.Add(_result.CoreForm);
-                        _result.Forms[_composition.Setting.Variations.IndexOf(_vari)].Type = _composition.Setting.Forms[_composition.Setting.Variations.IndexOf(_vari)];
-                        _result.Forms[_composition.Setting.Variations.IndexOf(_vari)].Variation = _vari;
+                        _result.Forms[_vari].Type = _composition.Setting.Forms[_vari];
+                        _result.Forms[_vari].Variation = _composition.Setting.Variations[_vari];
 
                         break;
 
                     case (Variation.Shrink):
 
                         _result.Forms.Add(VariateShrink(_result.CoreForm));
-                        _result.Forms[_composition.Setting.Variations.IndexOf(_vari)].Type = _composition.Setting.Forms[_composition.Setting.Variations.IndexOf(_vari)];
-                        _result.Forms[_composition.Setting.Variations.IndexOf(_vari)].Variation = _vari;
+                        _result.Forms[_vari].Type = _composition.Setting.Forms[_vari];
+                        _result.Forms[_vari].Variation = _composition.Setting.Variations[_vari];
 
                         break;
 
                     case (Variation.Extend):
 
-                        _result.Forms.Add(VariateExtend(_result.CoreForm, _result.CoreScale));
-                        _result.Forms[_composition.Setting.Variations.IndexOf(_vari)].Type = _composition.Setting.Forms[_composition.Setting.Variations.IndexOf(_vari)];
-                        _result.Forms[_composition.Setting.Variations.IndexOf(_vari)].Variation = _vari;
+                        _result.Forms.Add(VariateExtend(_result.CoreForm, _result.CoreScale, _result.Setting.BaseOctave));
+                        _result.Forms[_vari].Type = _composition.Setting.Forms[_vari];
+                        _result.Forms[_vari].Variation = _composition.Setting.Variations[_vari];
 
                         break;
 
                     case (Variation.Newition):
 
                         _result.Forms.Add(VariateNew(_composition));
-                        _result.Forms[_composition.Setting.Variations.IndexOf(_vari)].Type = _composition.Setting.Forms[_composition.Setting.Variations.IndexOf(_vari)];
-                        _result.Forms[_composition.Setting.Variations.IndexOf(_vari)].Variation = _vari;
+                        _result.Forms[_vari].Type = _composition.Setting.Forms[_vari];
+                        _result.Forms[_vari].Variation = _composition.Setting.Variations[_vari];
 
                         break;
 
                     case (Variation.Octaviation):
 
                         _result.Forms.Add(VariateOctave(_result.CoreForm));
-                        _result.Forms[_composition.Setting.Variations.IndexOf(_vari)].Type = _composition.Setting.Forms[_composition.Setting.Variations.IndexOf(_vari)];
-                        _result.Forms[_composition.Setting.Variations.IndexOf(_vari)].Variation = _vari;
+                        _result.Forms[_vari].Type = _composition.Setting.Forms[_vari];
+                        _result.Forms[_vari].Variation = _composition.Setting.Variations[_vari];
 
                         break;
 
                     case (Variation.Tailing):
 
-                        _result.Forms.Add(VariateTail(_result.CoreForm, _result.CoreScale));
-                        _result.Forms[_composition.Setting.Variations.IndexOf(_vari)].Type = _composition.Setting.Forms[_composition.Setting.Variations.IndexOf(_vari)];
-                        _result.Forms[_composition.Setting.Variations.IndexOf(_vari)].Variation = _vari;
+                        _result.Forms.Add(VariateTail(_result.CoreForm, _result.CoreScale, _result.Setting.BaseOctave));
+                        _result.Forms[_vari].Type = _composition.Setting.Forms[_vari];
+                        _result.Forms[_vari].Variation = _composition.Setting.Variations[_vari];
 
                         break;
                 }
@@ -134,6 +134,8 @@ namespace ACompositor.src
             Composition _compBuffer = _composition;
 
             _compBuffer.CoreForm = _result;
+
+            _compBuffer.CoreForm.Length = 2;
 
             _result.Rhythm = GenerateRhythm(_compBuffer);
 
@@ -211,29 +213,130 @@ namespace ACompositor.src
             _tension = GetMellToneList(MellTone.Tension, _composition.CoreForm, _composition.CoreScale);
             _tone = GetMellToneList(MellTone.Tone, _composition.CoreForm, _composition.CoreScale);
 
+            int _octaveBuffer = 0;
+
+            // 2.1. specific tension list making
+            for (int _iter = 0; _iter < _tension.Count; _iter++)
+            {
+                _octaveBuffer = 0;
+
+                for (int _itt = 0; _itt < _tension[_iter].Count; _itt++)
+                {
+                    if (_itt != _tension[_iter].Count - 1 && _tension[_iter][_itt] > _tension[_iter][_itt + 1])
+                    {
+
+                        _tension[_iter][_itt] = GetOctaveNote(_tension[_iter][_itt], _composition.Setting.BaseOctave  + _octaveBuffer);
+
+                        _octaveBuffer++;
+
+                        continue;
+                    }
+
+                    _tension[_iter][_itt] = GetOctaveNote(_tension[_iter][_itt], _composition.Setting.BaseOctave  + _octaveBuffer);
+
+                }
+            }
+
+            // 2.2. specific tone list making
+            for (int _iter = 0; _iter < _tone.Count; _iter++)
+            {
+                _octaveBuffer = 0;
+
+                for (int _itt = 0; _itt < _tone[_iter].Count; _itt++)
+                {
+                    if (_itt != _tone[_iter].Count - 1 && _tone[_iter][_itt] > _tone[_iter][_itt + 1])
+                    {
+
+                        _tone[_iter][_itt] = GetOctaveNote(_tone[_iter][_itt], _composition.Setting.BaseOctave + _octaveBuffer);
+
+                        _octaveBuffer++;
+
+                        continue;
+                    }
+
+                    _tone[_iter][_itt] = GetOctaveNote(_tone[_iter][_itt], _composition.Setting.BaseOctave + _octaveBuffer);
+
+                }
+            }
+
             // count buffer
             int _countBuffer = 0;
 
             // random buffer
             int _ranBuffer;
 
+            int _indexBuffer = 0;
+
+            List<bool> _loopKindBuffer = new List<bool>();
+            List<int> _loopBuffer = new List<int>();
+
             // 3. make specific mellody notes
             foreach(int _val in _composition.CoreForm.Rhythm.NoteTime)
             {
+                // looping check
+                if (_composition.CoreForm.Rhythm.Pattern.NodeLoop == _countBuffer)
+                {
+                    break;
+                }
+
                 _ranBuffer = random.Next() % 10;
 
                 // tension : 30 %
-                if (_ranBuffer <= 2)
+                if (_ranBuffer < 0)
                 {
-                    _result.FullMellody.Add(GetOctaveNote(_tension[_countBuffer / 8][random.Next() % _tension[_countBuffer / 8].Count], _composition.Setting.BaseOctave));
+                    _ranBuffer = random.Next() % _tension[_countBuffer / 8].Count;
+
+                    _result.FullMellody.Add(_tension[_countBuffer / 8][_ranBuffer]);
+
+                    _loopKindBuffer.Add(true);
+                    _loopBuffer.Add(_ranBuffer);
                 }
                 // chord tone : 70%
                 else
                 {
-                    _result.FullMellody.Add(GetOctaveNote(_tone[_countBuffer / 8][random.Next() % _tone[_countBuffer / 8].Count], _composition.Setting.BaseOctave));
+                    _ranBuffer = random.Next() % _tension[_countBuffer / 8].Count;
+
+                    _result.FullMellody.Add(_tone[_countBuffer / 8][_ranBuffer]);
+
+                    _loopKindBuffer.Add(false);
+                    _loopBuffer.Add(_ranBuffer);
                 }
 
+                _indexBuffer++;
                 _countBuffer += _val;
+            }
+
+            // calculate loop count
+            _ranBuffer = (_composition.CoreForm.Length * 32) / _countBuffer;
+
+            // start looping
+            while (_ranBuffer > 1)
+            {
+         
+                for(int _iter = 0; _iter < _loopBuffer.Count; _iter++)
+                {
+                    if (_countBuffer == _composition.CoreForm.Length * 32)
+                    { break; }
+
+                    // tension
+                    if (_loopKindBuffer[_iter])
+                    {
+                        _result.FullMellody.Add(_tension[_countBuffer / 8][_loopBuffer[_iter]]);
+                    }
+                    // tone
+                    else
+                    {
+                        _result.FullMellody.Add(_tone[_countBuffer / 8][_loopBuffer[_iter]]);
+                    }
+
+                    if (_countBuffer == _composition.CoreForm.Length * 32)
+                    { break; }
+
+                    _countBuffer += _composition.CoreForm.Rhythm.NoteTime[_indexBuffer];
+                    _indexBuffer++;
+                }
+
+                _ranBuffer--;
             }
 
             return _result;
@@ -286,22 +389,29 @@ namespace ACompositor.src
             // deep copy the form
             _result.Copy(_origin);
 
+            int _removeBuffer = 0;
+
             // variate
-            foreach(int _iter in _origin.Rhythm.NoteTime)
+            for(int _iter = 0; _iter < _origin.Rhythm.NoteTime.Count; _iter++)
             {
                 // check the item index
-                if(_origin.Rhythm.NoteTime.IndexOf(_iter) % 2 == 1 && _origin.Rhythm.NoteTime.IndexOf(_iter) != _origin.Rhythm.NoteTime.Count - 1)
+                if(_iter % 2 == 1 && _iter != _origin.Rhythm.NoteTime.Count - 1)
                 {
                     // change original list
                     // 1. change value
                     // rhythm (time value)
-                    _result.Rhythm.NoteTime[_origin.Rhythm.NoteTime.IndexOf(_iter) - 1] += _result.Rhythm.NoteTime[_origin.Rhythm.NoteTime.IndexOf(_iter)];
+                    _result.Rhythm.NoteTime[_iter - 1 - _removeBuffer] += _result.Rhythm.NoteTime[_iter - _removeBuffer];
 
                     // 2. delete value
                     // rhythm
-                    _result.Rhythm.NoteTime.RemoveAt(_origin.Rhythm.NoteTime.IndexOf(_iter));
+                    _result.Rhythm.NoteTime.RemoveAt(_iter - _removeBuffer);
+
+                    _result.Chord.Copy(_origin.Chord);
+
                     // mellody
-                    _result.Mellody.FullMellody.RemoveAt(_origin.Rhythm.NoteTime.IndexOf(_iter));
+                    _result.Mellody.FullMellody.RemoveAt(_iter - _removeBuffer);
+
+                    _removeBuffer++;
                 }
             }
 
@@ -314,7 +424,7 @@ namespace ACompositor.src
         /// <param name="_origin"></param>
         /// <param name="_scale"></param>
         /// <returns></returns>
-        Form VariateTail(Form _origin, ScaleNote _scale)
+        Form VariateTail(Form _origin, ScaleNote _scale, int _baseOctave)
         {
             Form _result = new Form();
 
@@ -334,6 +444,52 @@ namespace ACompositor.src
             _avoid = GetMellToneList(MellTone.Avoid, _origin, _scale);
             _tension = GetMellToneList(MellTone.Tension, _origin, _scale);
             _tone = GetMellToneList(MellTone.Tone, _origin, _scale);
+
+            int _octaveBuffer = 0;
+
+            // 2.1. specific tension list making
+            for (int _iter = 0; _iter < _tension.Count; _iter++)
+            {
+                _octaveBuffer = 0;
+
+                for (int _itt = 0; _itt < _tension[_iter].Count; _itt++)
+                {
+                    if (_itt != _tension[_iter].Count - 1 && _tension[_iter][_itt] > _tension[_iter][_itt + 1])
+                    {
+
+                        _tension[_iter][_itt] = GetOctaveNote(_tension[_iter][_itt], _baseOctave + _octaveBuffer);
+
+                        _octaveBuffer++;
+
+                        continue;
+                    }
+
+                    _tension[_iter][_itt] = GetOctaveNote(_tension[_iter][_itt], _baseOctave + _octaveBuffer);
+
+                }
+            }
+
+            // 2.2. specific tone list making
+            for (int _iter = 0; _iter < _tone.Count; _iter++)
+            {
+                _octaveBuffer = 0;
+
+                for (int _itt = 0; _itt < _tone[_iter].Count; _itt++)
+                {
+                    if (_itt != _tone[_iter].Count - 1 && _tone[_iter][_itt] > _tone[_iter][_itt + 1])
+                    {
+
+                        _tone[_iter][_itt] = GetOctaveNote(_tone[_iter][_itt], _baseOctave + _octaveBuffer);
+
+                        _octaveBuffer++;
+
+                        continue;
+                    }
+
+                    _tone[_iter][_itt] = GetOctaveNote(_tone[_iter][_itt], _baseOctave + _octaveBuffer);
+
+                }
+            }
 
             // count buffer
             int _countBuffer = 0;
@@ -357,18 +513,18 @@ namespace ACompositor.src
             _tailBuffer = _tailBuffer - (_tailBuffer / 4);
 
             // 2. variate
-            foreach (int _iter in _origin.Rhythm.NoteTime)
+            for (int _iter = 0; _iter < _origin.Rhythm.NoteTime.Count; _iter++)
             {
                 // check the item time value
                 if (_countBuffer > _tailBuffer)
                 {
-                    _indexBuffer = _origin.Rhythm.NoteTime.IndexOf(_iter);
+                    _indexBuffer = _iter;
 
                     break;
 
                 }
 
-                _countBuffer += _iter;
+                _countBuffer += _origin.Rhythm.NoteTime[_iter];
             }
 
             // reset mellodies
@@ -378,19 +534,19 @@ namespace ACompositor.src
             _countBuffer = 0;
 
             // 3. make new mellody notes
-            foreach (int _iter in _origin.Rhythm.NoteTime)
+            for (int _iter = 0; _iter < _origin.Rhythm.NoteTime.Count; _iter++)
             {
                 // check index : first 75% notes to be same / last 25% notes to be new
-                if (_origin.Rhythm.NoteTime.IndexOf(_iter) < _indexBuffer)
+                if (_iter < _indexBuffer)
                 {
-                    _result.Mellody.FullMellody.Add(_origin.Mellody.FullMellody[_origin.Rhythm.NoteTime.IndexOf(_iter)]);
+                    _result.Mellody.FullMellody.Add(_origin.Mellody.FullMellody[_iter]);
                 }
                 else
                 {
                     _ranBuffer = random.Next() % 10;
 
-                    // tension : 30 %
-                    if (_ranBuffer <= 2)
+                    // tension : 20 %
+                    if (_ranBuffer < 0)
                     {
                         _result.Mellody.FullMellody.Add(_tension[_countBuffer / 8][random.Next() % _tension[_countBuffer / 8].Count]);
                     }
@@ -402,7 +558,7 @@ namespace ACompositor.src
 
                 }
 
-                _countBuffer += _iter;
+                _countBuffer += _origin.Rhythm.NoteTime[_iter];
             }
 
             return _result;
@@ -421,6 +577,8 @@ namespace ACompositor.src
             _result.Copy(_composition.CoreForm);
 
             _result.Rhythm = GenerateRhythm(_composition);
+
+            _result.Chord.Copy(_composition.CoreForm.Chord);
 
             _result.Mellody = GenerateMellody(_composition);
 
@@ -454,12 +612,22 @@ namespace ACompositor.src
                 _oct = 12;
             }
 
+            _oct = 12;
+
             // apply variation
-            foreach (Note _iter in _origin.Mellody.FullMellody)
+            for (int _iter = 0; _iter < _origin.Mellody.FullMellody.Count; _iter++)
             {
-                if (_iter != Note.NULL)
+                if (_origin.Mellody.FullMellody[_iter] != Note.NULL)
                 {
-                    _result.Mellody.FullMellody[_origin.Mellody.FullMellody.IndexOf(_iter)] = (Note)(_iter + _oct);
+                    _result.Mellody.FullMellody[_iter] = (Note)(_origin.Mellody.FullMellody[_iter] + _oct);
+                }
+            }
+
+            for(int _iter = 0; _iter < _result.Chord.FullChord.Count; _iter++)
+            {
+                for (int _subiter = 0; _subiter < _result.Chord.FullChord[_iter].Count; _subiter++)
+                {
+                    _result.Chord.FullChord[_iter][_subiter] = (Note)(_result.Chord.FullChord[_iter][_subiter] + _oct);
                 }
             }
 
@@ -472,7 +640,7 @@ namespace ACompositor.src
         /// <param name="_origin"></param>
         /// <param name="_scale"></param>
         /// <returns></returns>
-        Form VariateExtend(Form _origin, ScaleNote _scale)
+        Form VariateExtend(Form _origin, ScaleNote _scale, int _baseOctave)
         {
             Form _result = new Form();
 
@@ -493,6 +661,52 @@ namespace ACompositor.src
             _tension = GetMellToneList(MellTone.Tension, _origin, _scale);
             _tone = GetMellToneList(MellTone.Tone, _origin, _scale);
 
+            int _octaveBuffer = 0;
+
+            // 2.1. specific tension list making
+            for (int _iter = 0; _iter < _tension.Count; _iter++)
+            {
+                _octaveBuffer = 0;
+
+                for (int _itt = 0; _itt < _tension[_iter].Count; _itt++)
+                {
+                    if (_itt != _tension[_iter].Count - 1 && _tension[_iter][_itt] > _tension[_iter][_itt + 1])
+                    {
+
+                        _tension[_iter][_itt] = GetOctaveNote(_tension[_iter][_itt], _baseOctave + _octaveBuffer);
+
+                        _octaveBuffer++;
+
+                        continue;
+                    }
+
+                    _tension[_iter][_itt] = GetOctaveNote(_tension[_iter][_itt], _baseOctave + _octaveBuffer);
+
+                }
+            }
+
+            // 2.2. specific tone list making
+            for (int _iter = 0; _iter < _tone.Count; _iter++)
+            {
+                _octaveBuffer = 0;
+
+                for (int _itt = 0; _itt < _tone[_iter].Count; _itt++)
+                {
+                    if (_itt != _tone[_iter].Count - 1 && _tone[_iter][_itt] > _tone[_iter][_itt + 1])
+                    {
+
+                        _tone[_iter][_itt] = GetOctaveNote(_tone[_iter][_itt], _baseOctave + _octaveBuffer);
+
+                        _octaveBuffer++;
+
+                        continue;
+                    }
+
+                    _tone[_iter][_itt] = GetOctaveNote(_tone[_iter][_itt], _baseOctave + _octaveBuffer);
+
+                }
+            }
+
             // count buffer
             int _countBuffer = 0;
 
@@ -500,32 +714,32 @@ namespace ACompositor.src
             int _ranBuffer;
 
             // 2. variate
-            foreach (int _iter in _origin.Rhythm.NoteTime)
+            for (int _iter = 0; _iter < _origin.Rhythm.NoteTime.Count; _iter++)
             {
                 // check the item index
-                if (_iter != 1)
+                if (_origin.Rhythm.NoteTime[_iter] != 1)
                 {
                     _ranBuffer = random.Next() % 10;
 
-                    _result.Rhythm.NoteTime[_origin.Rhythm.NoteTime.IndexOf(_iter)] /= 2;
-                    _result.Rhythm.NoteTime.Insert(_origin.Rhythm.NoteTime.IndexOf(_iter), _iter / 2);
+                    _result.Rhythm.NoteTime[_iter] /= 2;
+                    _result.Rhythm.NoteTime.Insert(_iter, _origin.Rhythm.NoteTime[_iter] / 2);
 
                     // tension : 30 %
                     if (_ranBuffer <= 2)
                     {
-                        _result.Mellody.FullMellody.Insert(_origin.Rhythm.NoteTime.IndexOf(_iter),
+                        _result.Mellody.FullMellody.Insert(_iter,
                             _tension[_countBuffer / 8][random.Next() % _tension[_countBuffer / 8].Count]);
                     }
                     // chord tone : 70%
                     else
                     {
-                        _result.Mellody.FullMellody.Insert(_origin.Rhythm.NoteTime.IndexOf(_iter),
+                        _result.Mellody.FullMellody.Insert(_iter,
                             _tone[_countBuffer / 8][random.Next() % _tone[_countBuffer / 8].Count]);
                     }
 
                 }
 
-                _countBuffer += _iter;
+                _countBuffer += _origin.Rhythm.NoteTime[_iter];
             }
 
             return _result;
@@ -568,34 +782,34 @@ namespace ACompositor.src
             }
 
             // 2. make avoid, tension and chord tone note list
-            foreach (List<Note> _iterChord in _chordBuffer)
+            for (int _iterChord = 0; _iterChord < _chordBuffer.Count; _iterChord++)
             {
-                foreach (Note _iterNote in _iterChord)
+                for (int _iterNote = 0; _iterNote < _chordBuffer[_iterChord].Count; _iterNote++)
                 {
                     // chord tone
-                    _tone[_chordBuffer.IndexOf(_iterChord)].Add(GetPureNote(_iterNote));
+                    _tone[_iterChord].Add(GetPureNote(_chordBuffer[_iterChord][_iterNote]));
 
                     // check if there is 3 avoid or tension notes
-                    if (_tone[_chordBuffer.IndexOf(_iterChord)].Count == _iterChord.Count)
+                    if (_tone[_iterChord].Count == _chordBuffer[_iterChord].Count)
                     {
                         break;
                     }
 
                     // last note in the chord
-                    _lastNoteBuffer = ((int)_iterChord[_iterChord.Count - 1] % 12);
+                    _lastNoteBuffer = ((int)_chordBuffer[_iterChord][_chordBuffer[_iterChord].Count - 1] % 12);
 
                     // 해당 코드에서 n번째 3도 위 음의 인덱스(스케일에서의 인덱스)
-                    _thirdNoteBuffer = (_scale.Notes.IndexOf((Note)_lastNoteBuffer) + _iterChord.IndexOf(_iterNote)) % 7;
+                    _thirdNoteBuffer = (_scale.Notes.IndexOf((Note)_lastNoteBuffer) + (3 * (_iterNote + 1))) % 7;
 
                     // avoid 
                     if ((int)_scale.Notes[_thirdNoteBuffer] - _lastNoteBuffer == 1)
                     {
-                        _avoid[_chordBuffer.IndexOf(_iterChord)].Add(_scale.Notes[_thirdNoteBuffer]);
+                        _avoid[_iterChord].Add(_scale.Notes[_thirdNoteBuffer]);
                     }
                     // tension
                     else
                     {
-                        _tension[_chordBuffer.IndexOf(_iterChord)].Add(_scale.Notes[_thirdNoteBuffer]);
+                        _tension[_iterChord].Add(_scale.Notes[_thirdNoteBuffer]);
                     }
                 }
             }
@@ -622,25 +836,38 @@ namespace ACompositor.src
         {
             List<ReplChord> _repls = new List<ReplChord>();
 
-            int _count = _chordCount * _chordLength;
+            int _count = _chordCount;
             int _ranBuffer;
 
             // 1. main chord form making
             while (_count > 0)
             {
-                _ranBuffer = random.Next() % 3;
+                _ranBuffer = random.Next() % 10;
 
-                if (_ranBuffer == 0)
+                if (_ranBuffer < 0)
                 {
                     _repls.Add(ReplChord.Dominant);
                 }
-                else if(_ranBuffer == 1)
+                else if(_ranBuffer < 0)
                 {
                     _repls.Add(ReplChord.SubDominant);
                 }
                 else
                 {
                     _repls.Add(ReplChord.Tonic);
+                }
+
+                _count--;
+            }
+
+            _count = _chordLength;
+
+            // 2. duplicate main chord form
+            while (_count > 1)
+            {
+                for(int _iter = 0; _iter < _chordCount; _iter++)
+                {
+                    _repls.Add(_repls[_iter]);
                 }
 
                 _count--;
@@ -700,12 +927,27 @@ namespace ACompositor.src
                 _subBuffer.Clear();
             }
 
+            int octaveBuffer = 0;
+
             // 1. specific chord making
             for (int _iter = 0; _iter < _chordBuffer.Count; _iter++)
             {
-                for(int _itt = 0; _itt < _chordBuffer[_iter].Count; _itt++)
+                octaveBuffer = 0;
+
+                for (int _itt = 0; _itt < _chordBuffer[_iter].Count; _itt++)
                 {
-                    _result[_iter][_itt] = GetOctaveNote(_chordBuffer[_iter][_itt], _baseOctave - 1);
+                    if (_itt != _chordBuffer[_iter].Count - 1 && _result[_iter][_itt] > _result[_iter][_itt + 1])
+                    {
+
+                        _result[_iter][_itt] = GetOctaveNote(_chordBuffer[_iter][_itt], _baseOctave - 1 + octaveBuffer);
+
+                        octaveBuffer++;
+
+                        continue;
+                    }
+
+                    _result[_iter][_itt] = GetOctaveNote(_chordBuffer[_iter][_itt], _baseOctave - 1 + octaveBuffer);
+
                 }
             }
             
@@ -793,7 +1035,7 @@ namespace ACompositor.src
         {
             int buffer = (int)note;
 
-            while (buffer > 12)
+            while (buffer >= 12)
             {
                 buffer -= 12;
             }

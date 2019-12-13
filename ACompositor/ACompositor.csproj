@@ -14,7 +14,8 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <PublishUrl>게시\</PublishUrl>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\qudrb\OneDrive\바탕 화면\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -24,10 +25,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -60,6 +61,12 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>0275D3D79EDA230FE86E1BB19CCA7E03AEC0A6AC</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>ACompositor_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NAudio, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -147,6 +154,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="ACompositor_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
@@ -171,34 +179,24 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="resource\image\icon_setting.png" />
+    <Content Include="resource\image\icon_composite.png" />
+    <Content Include="resource\image\icon_expand.png" />
+    <Content Include="resource\image\icon_pause2.png" />
+    <Content Include="resource\image\icon_play2.png" />
+    <Content Include="resource\image\icon_setting.png" />
+    <Content Include="resource\image\icon_stop2.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="resource\image\icon_pause.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    <Resource Include="Resources\icon_pause.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="resource\image\icon_play.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <Resource Include="Resources\icon_play.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="resource\image\icon_stop.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <Resource Include="Resources\icon_setting.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\icon_pause.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icon_play.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icon_setting.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icon_stop.png" />
+    <Resource Include="Resources\icon_stop.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="resource\sound\piano\a1.mp3" />

@@ -189,6 +189,7 @@ namespace ACompositor.src
 
             }
 
+
             isScaled = true;
 
             return;

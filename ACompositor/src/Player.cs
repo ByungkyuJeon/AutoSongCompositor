@@ -14,6 +14,8 @@ namespace ACompositor.src
     /// </summary>
     public class Player
     {
+        Main dispatcher;
+
         List<WaveOut> audioStreams;
 
         Dictionary<Note, byte[]> audioDic;
@@ -34,8 +36,10 @@ namespace ACompositor.src
 
         public int Position { get => position; }
 
-        public Player()
+        public Player(Main _main)
         {
+            dispatcher = _main;
+
             Initiate();
         }
 
@@ -149,9 +153,14 @@ namespace ACompositor.src
             _playTimer.Stop();
 
             position = 0;
+
+            dispatcher.Dispatcher.Invoke(new Action(delegate
+            {
+                dispatcher.DrawBar(Position);
+            }));
         }
 
-        private int GetTotalTime(List<Composition> _compositions)
+        public int GetTotalTime(List<Composition> _compositions)
         {
             List<int> _totalBuffer = new List<int>();
 
@@ -180,6 +189,7 @@ namespace ACompositor.src
                 }
             }
 
+            if(_timeBuffer == 0) { return 1; }
             return _timeBuffer;
         }
 
@@ -209,15 +219,43 @@ namespace ACompositor.src
                     }
                 }
 
-                // chord search
+                /*
                 if(_position % 8 == 0)
                 {
-                    foreach(Note _note in _comp.Forms[GetFormIndex(_comp.Forms, _position)].Chord.FullChord
-                        [((_position % (_comp.Forms[GetFormIndex(_comp.Forms, _position)].Length * 32))) / 8])
+                    foreach(Note _iter in _comp.Forms[GetFormIndex(_comp.Forms, _position)].Chord.FullChord
+                            [((_position % (_comp.Forms[GetFormIndex(_comp.Forms, _position)].Length * 32))) / 8])
                     {
-                        _result.Add(_note);
+                        _result.Add(_iter);
                     }
                 }
+                */
+                
+                // chord search
+                if(_position % 2 == 0)
+                {
+                    int _formIndex = GetFormIndex(_comp.Forms, _position);
+
+                    if (_comp.Setting.ChordHeight == 3)
+                    {
+                        if ((_position % 8 / 2) == 3)
+                        {
+                            _result.Add(_comp.Forms[_formIndex].Chord.FullChord[((_position % (_comp.Forms[_formIndex].Length * 32))) / 8][1]);
+                        }
+                        else
+                        {
+                            _result.Add(_comp.Forms[_formIndex].Chord.FullChord
+                                [((_position % (_comp.Forms[_formIndex].Length * 32))) / 8][(_position % 8) / 2]);
+                        }
+                    }
+                    else
+                    {
+                        _result.Add(_comp.Forms[_formIndex].Chord.FullChord
+                            [((_position % (_comp.Forms[_formIndex].Length * 32))) / 8][(_position % 8) / 2]);
+                    }
+                }
+                
+                
+                
 
                 _timeBuffer = 0;
             }
@@ -225,6 +263,12 @@ namespace ACompositor.src
             return _result;
         }
 
+        /// <summary>
+        /// Returns form index form param position
+        /// </summary>
+        /// <param name="_forms"></param>
+        /// <param name="_position"></param>
+        /// <returns></returns>
         private int GetFormIndex(List<Form> _forms, int _position)
         {
             int _timeBuffer = 0;
@@ -246,6 +290,10 @@ namespace ACompositor.src
 
         private Mp3FileReader GetReader(Note _note)
         {
+            if(_note == Note.A6)
+            {
+                return new Mp3FileReader(new MemoryStream(audioDic[Note.A5]));
+            }
             return new Mp3FileReader(new MemoryStream(audioDic[_note]));        
         }
 
@@ -371,11 +419,11 @@ namespace ACompositor.src
             {
                 _passBuffer = false;
 
-                foreach (WaveOut _wave in audioStreams)
+                for (int _wave = 0; _wave < audioStreams.Count; _wave++)
                 {
-                    if (_wave.PlaybackState != PlaybackState.Playing)
+                    if (audioStreams[_wave].PlaybackState != PlaybackState.Playing)
                     {
-                        _indexBuffer = audioStreams.IndexOf(_wave);
+                        _indexBuffer = _wave;
 
                         _passBuffer = true;
 
@@ -385,6 +433,10 @@ namespace ACompositor.src
 
                 if(_passBuffer)
                 {
+                    dispatcher.Dispatcher.Invoke(new Action(delegate
+                    {
+                        audioStreams[_indexBuffer].Dispose();
+                    }));
                     audioStreams.RemoveAt(_indexBuffer);
                 }
             }
@@ -396,9 +448,17 @@ namespace ACompositor.src
         {
             TrimWaves();
 
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
             if (playState)
             {
                 Play();
+
+                dispatcher.Dispatcher.Invoke(new Action(delegate
+                {
+                    dispatcher.DrawBar(Position);
+                }));
             }
         }
 
