@@ -44,8 +44,8 @@ Will be commited
 
 ## Author
 
-**Jun Byungkyu** - Initial Work - [Github](https://github.com/coxozo123)
+**Jeon Byungkyu** - Initial Work - [Github](https://github.com/ByungkyuJeon)
 
 ## Contact
 
-* Email : qudrb29@naver.com
+* Email : byungkyu_dev@gmail.com
